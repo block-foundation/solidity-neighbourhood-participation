@@ -23,7 +23,15 @@ pragma solidity ^0.8.19;
 // Contracts
 // ============================================================================
 
+/**
+ * Neighborhood Participation Contract
+ * @dev 
+ */
 contract NeighborhoodParticipation {
+
+
+    // Parameters
+    // ========================================================================
 
     address public manager;
     mapping(address => bool) public participants;
@@ -37,6 +45,9 @@ contract NeighborhoodParticipation {
         Rejected
     }
 
+    // Structs
+    // ========================================================================
+
     struct Initiative {
         string description;
         address initiator;
@@ -46,7 +57,22 @@ contract NeighborhoodParticipation {
         mapping(address => bool) voted;
     }
 
+    // Constructor
+    // ========================================================================
+
+    constructor(uint256 _quorum) {
+        manager = msg.sender;
+        quorum = _quorum;
+    }
+
+    // Mappings
+    // ========================================================================
+
     mapping(uint256 => Initiative) public initiatives;
+
+
+    // Modifiers
+    // ========================================================================
 
     modifier onlyManager() {
         require(msg.sender == manager, "Only the manager can perform this action");
@@ -58,10 +84,9 @@ contract NeighborhoodParticipation {
         _;
     }
 
-    constructor(uint256 _quorum) {
-        manager = msg.sender;
-        quorum = _quorum;
-    }
+
+    // Methods
+    // ========================================================================
 
     function inviteParticipant(address _participant) public onlyManager {
         invitations[_participant] = true;
@@ -112,4 +137,5 @@ contract NeighborhoodParticipation {
 
         return (initiative.description, initiative.initiator, initiative.yesVotes, initiative.noVotes, initiative.state);
     }
+
 }
