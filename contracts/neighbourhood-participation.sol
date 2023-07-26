@@ -34,8 +34,6 @@ contract NeighborhoodParticipation {
     // ========================================================================
 
     address public manager;
-    mapping(address => bool) public participants;
-    mapping(address => bool) private invitations;
     uint256 public quorum;
     uint256 public initiativeCount = 0;
 
@@ -69,18 +67,25 @@ contract NeighborhoodParticipation {
     // ========================================================================
 
     mapping(uint256 => Initiative) public initiatives;
-
+    mapping(address => bool) public participants;
+    mapping(address => bool) private invitations;
 
     // Modifiers
     // ========================================================================
 
     modifier onlyManager() {
-        require(msg.sender == manager, "Only the manager can perform this action");
+        require(
+            msg.sender == manager,
+            "Only the manager can perform this action"
+        );
         _;
     }
 
     modifier onlyParticipant() {
-        require(participants[msg.sender] == true, "Only a participant can perform this action");
+        require(
+            participants[msg.sender] == true,
+            "Only a participant can perform this action"
+        );
         _;
     }
 
@@ -88,17 +93,24 @@ contract NeighborhoodParticipation {
     // Methods
     // ========================================================================
 
-    function inviteParticipant(address _participant) public onlyManager {
+    function inviteParticipant(
+        address _participant
+    ) public onlyManager {
         invitations[_participant] = true;
     }
 
     function joinNeighborhood() public {
-        require(invitations[msg.sender] == true, "You must be invited to join the neighborhood");
+        require(
+            invitations[msg.sender] == true,
+            "You must be invited to join the neighborhood"
+        );
         participants[msg.sender] = true;
         invitations[msg.sender] = false;
     }
 
-    function proposeInitiative(string memory description) public onlyParticipant {
+    function proposeInitiative(
+        string memory description
+    ) public onlyParticipant {
         Initiative memory newInitiative = Initiative({
             description: description,
             initiator: msg.sender,
@@ -111,11 +123,20 @@ contract NeighborhoodParticipation {
         initiativeCount++;
     }
 
-    function vote(uint initiativeIndex, bool vote) public onlyParticipant {
+    function vote(
+        uint initiativeIndex,
+        bool vote
+    ) public onlyParticipant {
         Initiative storage initiative = initiatives[initiativeIndex];
 
-        require(initiative.state == InitiativeState.Proposed, "Can only vote on proposed initiatives");
-        require(!initiative.voted[msg.sender], "Already voted on this initiative");
+        require(
+            initiative.state == InitiativeState.Proposed,
+            "Can only vote on proposed initiatives"
+        );
+        require(
+            !initiative.voted[msg.sender],
+            "Already voted on this initiative"
+        );
 
         if (vote) {
             initiative.yesVotes++;
@@ -132,10 +153,24 @@ contract NeighborhoodParticipation {
         }
     }
 
-    function getInitiative(uint initiativeIndex) public view returns (string memory description, address initiator, uint256 yesVotes, uint256 noVotes, InitiativeState state) {
+    function getInitiative(
+        uint initiativeIndex
+    ) public view returns (
+        string memory description,
+        address initiator,
+        uint256 yesVotes,
+        uint256 noVotes,
+        InitiativeState state
+    ) {
         Initiative storage initiative = initiatives[initiativeIndex];
 
-        return (initiative.description, initiative.initiator, initiative.yesVotes, initiative.noVotes, initiative.state);
+        return (
+            initiative.description,
+            initiative.initiator,
+            initiative.yesVotes,
+            initiative.noVotes,
+            initiative.state
+        );
     }
 
 }
