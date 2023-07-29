@@ -39,7 +39,7 @@
 
 ## Introduction
 
-The NeighborhoodParticipation smart contract, written in Solidity for the Ethereum blockchain, is designed to facilitate decision-making and participation within a neighbourhood community. It provides a decentralized platform for community members to propose initiatives, vote on them, and check their status.
+The Neighborhood Participation smart contract, written in Solidity for the Ethereum blockchain, is designed to facilitate decision-making and participation within a neighbourhood community. It provides a decentralized platform for community members to propose initiatives, vote on them, and check their status.
 
 In this smart contract, each community or neighborhood has a manager, typically the person who deploys the contract. This manager can invite new participants to join the community. Once an individual is invited, they can accept the invitation to join the neighborhood.
 
